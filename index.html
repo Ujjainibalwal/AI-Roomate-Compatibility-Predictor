@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RoomieAI — AI Roommate Compatibility Predictor</title>
+  <meta name="description" content="Predict how compatible you are with your potential roommate using a deep learning neural network. Analyze sleep, cleanliness, noise, and 5 more lifestyle categories.">
+  <meta property="og:title" content="RoomieAI — AI Roommate Compatibility Predictor">
+  <meta property="og:description" content="Deep learning powered roommate compatibility analysis across 8 lifestyle categories.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!-- Background Effects -->
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  <div class="glow-orb glow-orb--1" aria-hidden="true"></div>
+  <div class="glow-orb glow-orb--2" aria-hidden="true"></div>
+  <div class="glow-orb glow-orb--3" aria-hidden="true"></div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-brain" aria-hidden="true">🧠</div>
+    <div class="loading-text" id="loading-text">Initializing Neural Network...</div>
+    <div class="loading-bar">
+      <div class="loading-bar__fill"></div>
+    </div>
+  </div>
+
+  <!-- App Container -->
+  <div class="app-container">
+
+    <!-- ========== SCREEN 1: Landing ========== -->
+    <section class="screen landing active" id="screen-landing" aria-label="Landing page">
+      <div class="landing__badge">
+        <span class="landing__badge-dot"></span>
+        Powered by Deep Learning
+      </div>
+
+      <h1 class="landing__title">Find Your Perfect Roommate Match</h1>
+
+      <p class="landing__subtitle">
+        Our AI neural network analyzes 8 lifestyle dimensions to predict
+        how compatible you are with your potential roommate — in seconds.
+      </p>
+
+      <div class="landing__features">
+        <div class="feature-card">
+          <div class="feature-card__icon">🧠</div>
+          <div class="feature-card__title">Deep Learning</div>
+          <div class="feature-card__desc">Neural network trained on compatibility patterns</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">📊</div>
+          <div class="feature-card__title">8 Categories</div>
+          <div class="feature-card__desc">From sleep schedules to sharing habits</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">⚡</div>
+          <div class="feature-card__title">Instant Results</div>
+          <div class="feature-card__desc">Get your compatibility score in seconds</div>
+        </div>
+      </div>
+
+      <div class="landing__cta">
+        <button class="btn btn--primary" id="btn-start" type="button">
+          <span>Get Started</span>
+          <span class="btn--icon">→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== SCREEN 2: Person 1 ========== -->
+    <section class="screen questionnaire" id="screen-person1" aria-label="Person 1 questionnaire">
+      <div class="progress-bar">
+        <div class="progress-bar__fill" style="width: 33%"></div>
+      </div>
+
+      <div class="questionnaire__header">
+        <span class="questionnaire__person-icon">🧑</span>
+        <div class="questionnaire__step">Step 1 of 2</div>
+        <h2 class="questionnaire__title">Tell Us About You</h2>
+        <p class="questionnaire__subtitle">Answer these 8 lifestyle questions honestly</p>
+      </div>
+
+      <div class="questions-grid" id="questions-p1">
+        <!-- Question 1: Sleep Schedule -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">🌙</div>
+            <div>
+              <div class="question-card__label">Sleep Schedule</div>
+              <div class="question-card__sublabel">When do you go to bed?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>9 PM</span>
+              <span>3 AM</span>
+            </div>
+            <input type="range" id="p1-sleep" min="21" max="27" step="0.5" value="23">
+            <div class="slider-value" id="p1-sleep-val">11:00 PM</div>
+          </div>
+        </div>
+
+        <!-- Question 2: Cleanliness -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">✨</div>
+            <div>
+              <div class="question-card__label">Cleanliness</div>
+              <div class="question-card__sublabel">How tidy is your space?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Relaxed</span>
+              <span>Spotless</span>
+            </div>
+            <input type="range" id="p1-cleanliness" min="1" max="5" step="1" value="3">
+            <div class="slider-value" id="p1-cleanliness-val">Moderate</div>
+          </div>
+        </div>
+
+        <!-- Question 3: Noise -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">🔊</div>
+            <div>
+              <div class="question-card__label">Noise Tolerance</div>
+              <div class="question-card__sublabel">How do you feel about noise?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Silent</span>
+              <span>Loud & Lively</span>
+            </div>
+            <input type="range" id="p1-noise" min="1" max="5" step="1" value="3">
+            <div class="slider-value" id="p1-noise-val">Moderate</div>
+          </div>
+        </div>
+
+        <!-- Question 4: Social -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">👥</div>
+            <div>
+              <div class="question-card__label">Social Habits</div>
+              <div class="question-card__sublabel">How often do you have guests?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Rarely</span>
+              <span>Very Often</span>
+            </div>
+            <input type="range" id="p1-social" min="1" max="5" step="1" value="3">
+            <div class="slider-value" id="p1-social-val">Sometimes</div>
+          </div>
+        </div>
+
+        <!-- Question 5: Temperature -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">🌡️</div>
+            <div>
+              <div class="question-card__label">Temperature</div>
+              <div class="question-card__sublabel">Ideal room temperature?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>60°F / 15°C</span>
+              <span>80°F / 27°C</span>
+            </div>
+            <input type="range" id="p1-temperature" min="60" max="80" step="1" value="70">
+            <div class="slider-value" id="p1-temperature-val">70°F (21°C)</div>
+          </div>
+        </div>
+
+        <!-- Question 6: Work Schedule -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">💼</div>
+            <div>
+              <div class="question-card__label">Work Schedule</div>
+              <div class="question-card__sublabel">Morning or night productivity?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Early Bird</span>
+              <span>Night Owl</span>
+            </div>
+            <input type="range" id="p1-work" min="1" max="5" step="1" value="3">
+            <div class="slider-value" id="p1-work-val">Flexible</div>
+          </div>
+        </div>
+
+        <!-- Question 7: Pets -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">🐾</div>
+            <div>
+              <div class="question-card__label">Pet Friendliness</div>
+              <div class="question-card__sublabel">How do you feel about pets?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>No Pets</span>
+              <span>Love All Pets</span>
+            </div>
+            <input type="range" id="p1-pets" min="1" max="5" step="1" value="3">
+            <div class="slider-value" id="p1-pets-val">Okay with some</div>
+          </div>
+        </div>
+
+        <!-- Question 8: Sharing -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">🤝</div>
+            <div>
+              <div class="question-card__label">Sharing</div>
+              <div class="question-card__sublabel">How willing to share belongings?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Private</span>
+              <span>Share Everything</span>
+            </div>
+            <input type="range" id="p1-sharing" min="1" max="5" step="1" value="3">
+            <div class="slider-value" id="p1-sharing-val">Some things</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn--secondary" id="btn-back-to-landing" type="button">
+          <span class="btn--icon">←</span>
+          <span>Back</span>
+        </button>
+        <button class="btn btn--primary" id="btn-to-person2" type="button">
+          <span>Next: Your Roommate</span>
+          <span class="btn--icon">→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== SCREEN 3: Person 2 ========== -->
+    <section class="screen questionnaire" id="screen-person2" aria-label="Person 2 questionnaire">
+      <div class="progress-bar">
+        <div class="progress-bar__fill" style="width: 66%"></div>
+      </div>
+
+      <div class="questionnaire__header">
+        <span class="questionnaire__person-icon">🧑‍🤝‍🧑</span>
+        <div class="questionnaire__step">Step 2 of 2</div>
+        <h2 class="questionnaire__title">About Your Roommate</h2>
+        <p class="questionnaire__subtitle">Answer for your potential roommate</p>
+      </div>
+
+      <div class="questions-grid" id="questions-p2">
+        <!-- Question 1: Sleep Schedule -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">🌙</div>
+            <div>
+              <div class="question-card__label">Sleep Schedule</div>
+              <div class="question-card__sublabel">When do they go to bed?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>9 PM</span>
+              <span>3 AM</span>
+            </div>
+            <input type="range" id="p2-sleep" min="21" max="27" step="0.5" value="24">
+            <div class="slider-value" id="p2-sleep-val">12:00 AM</div>
+          </div>
+        </div>
+
+        <!-- Question 2: Cleanliness -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">✨</div>
+            <div>
+              <div class="question-card__label">Cleanliness</div>
+              <div class="question-card__sublabel">How tidy is their space?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Relaxed</span>
+              <span>Spotless</span>
+            </div>
+            <input type="range" id="p2-cleanliness" min="1" max="5" step="1" value="3">
+            <div class="slider-value" id="p2-cleanliness-val">Moderate</div>
+          </div>
+        </div>
+
+        <!-- Question 3: Noise -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">🔊</div>
+            <div>
+              <div class="question-card__label">Noise Tolerance</div>
+              <div class="question-card__sublabel">How do they feel about noise?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Silent</span>
+              <span>Loud & Lively</span>
+            </div>
+            <input type="range" id="p2-noise" min="1" max="5" step="1" value="3">
+            <div class="slider-value" id="p2-noise-val">Moderate</div>
+          </div>
+        </div>
+
+        <!-- Question 4: Social -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">👥</div>
+            <div>
+              <div class="question-card__label">Social Habits</div>
+              <div class="question-card__sublabel">How often do they have guests?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Rarely</span>
+              <span>Very Often</span>
+            </div>
+            <input type="range" id="p2-social" min="1" max="5" step="1" value="3">
+            <div class="slider-value" id="p2-social-val">Sometimes</div>
+          </div>
+        </div>
+
+        <!-- Question 5: Temperature -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">🌡️</div>
+            <div>
+              <div class="question-card__label">Temperature</div>
+              <div class="question-card__sublabel">Their ideal room temperature?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>60°F / 15°C</span>
+              <span>80°F / 27°C</span>
+            </div>
+            <input type="range" id="p2-temperature" min="60" max="80" step="1" value="72">
+            <div class="slider-value" id="p2-temperature-val">72°F (22°C)</div>
+          </div>
+        </div>
+
+        <!-- Question 6: Work Schedule -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">💼</div>
+            <div>
+              <div class="question-card__label">Work Schedule</div>
+              <div class="question-card__sublabel">Morning or night productivity?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Early Bird</span>
+              <span>Night Owl</span>
+            </div>
+            <input type="range" id="p2-work" min="1" max="5" step="1" value="3">
+            <div class="slider-value" id="p2-work-val">Flexible</div>
+          </div>
+        </div>
+
+        <!-- Question 7: Pets -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">🐾</div>
+            <div>
+              <div class="question-card__label">Pet Friendliness</div>
+              <div class="question-card__sublabel">How do they feel about pets?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>No Pets</span>
+              <span>Love All Pets</span>
+            </div>
+            <input type="range" id="p2-pets" min="1" max="5" step="1" value="3">
+            <div class="slider-value" id="p2-pets-val">Okay with some</div>
+          </div>
+        </div>
+
+        <!-- Question 8: Sharing -->
+        <div class="question-card">
+          <div class="question-card__header">
+            <div class="question-card__icon">🤝</div>
+            <div>
+              <div class="question-card__label">Sharing</div>
+              <div class="question-card__sublabel">How willing to share belongings?</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Private</span>
+              <span>Share Everything</span>
+            </div>
+            <input type="range" id="p2-sharing" min="1" max="5" step="1" value="3">
+            <div class="slider-value" id="p2-sharing-val">Some things</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn--secondary" id="btn-back-to-p1" type="button">
+          <span class="btn--icon">←</span>
+          <span>Back</span>
+        </button>
+        <button class="btn btn--primary" id="btn-analyze" type="button">
+          <span>🧠 Analyze Compatibility</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== SCREEN 4: Results ========== -->
+    <section class="screen results" id="screen-results" aria-label="Compatibility results">
+      <div class="results__header">
+        <h2 class="results__title">Your Compatibility Report</h2>
+        <p class="results__subtitle">Analyzed by our deep learning neural network</p>
+      </div>
+
+      <!-- Score Gauge -->
+      <div class="gauge-container" id="gauge-container">
+        <svg class="gauge-svg" viewBox="0 0 240 240">
+          <circle class="gauge-bg" cx="120" cy="120" r="110"></circle>
+          <circle class="gauge-glow" id="gauge-glow" cx="120" cy="120" r="110"></circle>
+          <circle class="gauge-fill" id="gauge-fill" cx="120" cy="120" r="110"></circle>
+        </svg>
+        <div class="gauge-center">
+          <div class="gauge-score" id="gauge-score">0</div>
+          <div class="gauge-label">out of 100</div>
+        </div>
+      </div>
+
+      <!-- Compatibility Badge -->
+      <div id="badge-container"></div>
+
+      <!-- Dashboard Grid -->
+      <div class="results-dashboard">
+        <!-- Category Breakdown -->
+        <div class="results-panel">
+          <div class="results-panel__title">
+            <span class="results-panel__title-icon">📊</span>
+            Category Breakdown
+          </div>
+          <div id="category-bars"></div>
+        </div>
+
+        <!-- AI Tips -->
+        <div class="results-panel">
+          <div class="results-panel__title">
+            <span class="results-panel__title-icon">💡</span>
+            AI Insights
+          </div>
+          <ul class="tips-list" id="tips-list"></ul>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="results__actions">
+        <button class="btn btn--primary" id="btn-try-again" type="button">
+          <span>↻ Try Again</span>
+        </button>
+        <button class="btn btn--secondary" id="btn-share" type="button">
+          <span>📋 Copy Results</span>
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
+  <script src="particles.js"></script>
+  <script src="model.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
