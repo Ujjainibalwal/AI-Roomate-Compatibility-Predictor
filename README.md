@@ -94,7 +94,7 @@ python3 -m http.server 8080
 npx serve .
 ```
 
-Open **http://localhost:8080** in your browser.
+Open ** https://ujjainibalwal.github.io/AI-Roomate-Compatibility-Predictor/** in your browser.
 
 > [!NOTE]
 > The TensorFlow.js library is loaded from a CDN, so you need an internet connection on first load. After that, the neural network trains and runs entirely on your device.
