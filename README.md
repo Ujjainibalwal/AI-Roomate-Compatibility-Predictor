@@ -96,10 +96,7 @@ npx serve .
 
 Open ** https://ujjainibalwal.github.io/AI-Roomate-Compatibility-Predictor/** in your browser.
 
-> [!NOTE]
-> The TensorFlow.js library is loaded from a CDN, so you need an internet connection on first load. After that, the neural network trains and runs entirely on your device.
 
----
 
 ## 📁 Project Structure
 
